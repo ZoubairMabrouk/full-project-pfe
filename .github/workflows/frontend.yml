@@ -31,6 +31,7 @@ jobs:
       - name: Install
         run: |
           cd frontend
+          ls -a
           npm install --prefer-offline
       - name: Build
         run: |
