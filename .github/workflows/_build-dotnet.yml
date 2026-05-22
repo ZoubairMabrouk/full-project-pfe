@@ -19,7 +19,7 @@ on:
     secrets:
       GHCR_TOKEN:
         required: true
-      DEPLOY_PAT_TOKEN:
+      DEPLOY_REPO_TOKEN:
         required: true
 
 jobs:
@@ -56,16 +56,20 @@ jobs:
           dotnet-version: '9.0.x'
 
       - name: Restore
-        run: dotnet restore ${{ inputs.service-path }}${{ inputs.solution-file }}
+        working-directory: ${{ inputs.service-path }}
+        run: dotnet restore ${{ inputs.solution-file }}
 
       - name: Code quality
-        run: dotnet format ${{ inputs.service-path }}${{ inputs.solution-file }} --verify-no-changes
+        working-directory: ${{ inputs.service-path }}
+        run: dotnet format ${{ inputs.solution-file }} --verify-no-changes
 
       - name: Build
-        run: dotnet build ${{ inputs.service-path }}${{ inputs.solution-file }} --no-restore -c Release
+        working-directory: ${{ inputs.service-path }}
+        run: dotnet build ${{ inputs.solution-file }} --no-restore -c Release
 
       - name: Test
-        run: dotnet test ${{ inputs.service-path }}${{ inputs.solution-file }} --no-build -c Release \
+        working-directory: ${{ inputs.service-path }}
+        run: dotnet test ${{ inputs.solution-file }} --no-build -c Release \
                --logger "trx;LogFileName=results.trx" \
                --collect:"XPlat Code Coverage"
 
